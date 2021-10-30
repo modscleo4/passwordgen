@@ -126,6 +126,23 @@ a:hover {
     display: unset;
 }
 
+.custom-number-input {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    grid-gap: 4px;
+}
+
+.custom-number-input input {
+    appearance: 'textfield';
+    text-align: center;
+}
+
+.custom-number-input input::-webkit-outer-spin-button,
+.custom-number-input input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
 #app {
     width: 100%;
     min-width: 400px;
@@ -154,10 +171,10 @@ a:hover {
 }
 
 .container {
-    width: 768px;
+    width: 832px;
     display: grid;
     grid-template-rows: auto auto;
-    grid-row-gap: 32px;
+    grid-row-gap: 64px;
 }
 
 .container .password {
@@ -166,14 +183,14 @@ a:hover {
 
 .container .password input {
     width: 100%;
-    font-size: 1.5em;
+    font-size: 1.75em;
     border-radius: 4px;
     font-family: monospace;
 }
 
 .container .password .buttons {
     position: absolute;
-    right: 1em;
+    right: calc(0.25em + 4px);
     top: 0;
     bottom: 0;
     margin: auto;
@@ -181,24 +198,38 @@ a:hover {
     align-items: center;
 }
 
-.container .options {
+.container .options-container {
+    display: grid;
+    grid-template-rows: auto auto;
+    grid-row-gap: 16px;
+}
+
+.container .options-container .options {
     display: grid;
     grid-template-columns: max-content auto;
     grid-column-gap: 16px;
 }
 
-.container .options div:last-child {
+.container .options-container .options .allowed_chars {
+    margin-top: -2em;
+}
+
+.container .options-container .options div:last-child {
     justify-self: end;
 }
 
-.container .options .password_length {
+.container .options-container .options .password_length {
     display: grid;
     grid-template-columns: auto auto;
     grid-column-gap: 8px;
 }
 
-.container .options #password_length,
-.container .options #password_length_range {
+.container .options-container .options #password_length,
+.container .options-container .options #password_length_range {
     width: unset;
     height: unset;
+}
+
+.container .options-container .options #password_length_range {
+    width: 12em;
 }

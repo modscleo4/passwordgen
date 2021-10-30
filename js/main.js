@@ -1,6 +1,6 @@
 'use strict';
 
-import * as Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.5/vue.esm-browser.prod.js';
+import * as Vue from 'https://cdnjs.cloudflare.com/ajax/libs/vue/3.2.20/vue.esm-browser.prod.js';
 
 function importScript(src) {
     const script = document.createElement('script');
@@ -14,13 +14,6 @@ function importScript(src) {
 window.addEventListener('appinstalled', () => {
     console.log('A2HS installed');
 });
-
-/**
- * @type {Worker|undefined}
- */
-let worker;
-
-let stockfish;
 
 const app = Vue.createApp({
     data: () => ({
@@ -42,6 +35,14 @@ const app = Vue.createApp({
             },
         },
     }),
+
+    mounted() {
+        console.log(document.querySelector('#password_length_range').getAttribute('title'));
+        // Enable all tooltips
+        [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]')).forEach(function (el) {
+            new bootstrap.Tooltip(el);
+        });
+    },
 
     computed: {
         password() {
@@ -73,11 +74,33 @@ const app = Vue.createApp({
          * @param {string} str
          */
         copyToClipboard(str) {
+            const tooltip = new bootstrap.Tooltip(document.querySelector('#btn_copy'), {
+                title: 'Copied!',
+                trigger: 'manual',
+                placement: 'top',
+            });
+
+            tooltip.show();
+
+            // Wait 2 seconds then hide it.
+            setTimeout(() => {
+                tooltip.hide();
+            }, 2000);
+
             navigator.clipboard.writeText(str);
         },
 
         generate() {
             this.forceUpdate++;
+        },
+
+        reloadSliderTooltip() {
+            const slider = document.querySelector('#password_length_range');
+            const tooltip = document.querySelector('#' + slider.getAttribute('aria-describedby'));
+            tooltip.querySelector('.tooltip-inner').innerHTML = slider.getAttribute('title');
+
+            // Force update tooltip
+            slider.setAttribute('data-bs-original-title', slider.getAttribute('title'));
         }
     },
 }).mount('#app');
