@@ -11,6 +11,10 @@ function importScript(src) {
     return script;
 }
 
+function padLeft(str, length, char = '0') {
+    return (new Array(length + 1).join(char) + str).slice(-length);
+}
+
 window.addEventListener('appinstalled', () => {
     console.log('A2HS installed');
 });
@@ -94,13 +98,23 @@ const app = Vue.createApp({
             this.forceUpdate++;
         },
 
-        reloadSliderTooltip() {
-            const slider = document.querySelector('#password_length_range');
-            const tooltip = document.querySelector('#' + slider.getAttribute('aria-describedby'));
-            tooltip.querySelector('.tooltip-inner').innerHTML = slider.getAttribute('title');
+        reloadSliderTooltip(delay = 0) {
+            const callback = () => {
+                const slider = document.querySelector('#password_length_range');
+                const value = this.passwordLength;
+                const tooltip = document.querySelector('#' + slider.getAttribute('aria-describedby'));
+                tooltip.querySelector('.tooltip-inner').innerHTML = padLeft(value, 2);
+                tooltip.style.left = -142 + 7.5 * value + 'px';
 
-            // Force update tooltip
-            slider.setAttribute('data-bs-original-title', slider.getAttribute('title'));
+                // Force update tooltip
+                slider.setAttribute('data-bs-original-title', padLeft(value, 2));
+            }
+
+            if (delay) {
+                setTimeout(callback, delay);
+            } else {
+                callback();
+            }
         }
     },
 }).mount('#app');
